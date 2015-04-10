@@ -3,7 +3,7 @@
 #include<string.h>
 
 
-int find(char *str){
+int find(char *str, char *string){
 FILE *memberslog=NULL;
 char temp[300];
 
@@ -15,7 +15,9 @@ if(memberslog == NULL){
 while(fgets(temp,200,memberslog) != NULL)
 {
 	if((strstr(temp,str)) != NULL){
+		if((strstr(temp,string)) != NULL){
 		return 1;
+		}
 	}
 }
 
@@ -42,54 +44,31 @@ if((string=malloc(sizeof(char) * n+1)) != NULL){
 	}
 }
 }
-/*
-while((c = getchar ()) != EOF && a<n){
-	if(a<200){
-		if(c!='+'){
-		string[a]=c;
-	}
-	else{
-	string[a]=' ';
-	}
-	a++;
- 	}
- }
-*/
-//char *line=strdup(string);
 
 username = strtok(string, split);
 password = strtok(NULL, split);
 
-//sscanf(username,"user=%s",user);
-//sscanf(password,"pass=%s",pass);
-
 strtok_r(username, splite, &user);
-
 strtok_r(password, splite, &pass);
 
 
 printf("Content-Type:text/html\n\n");
 printf("<html>");
-printf("<p>");
-if(user == NULL){
-	printf("user is null");
-}
-printf("%s\n", user);
-printf("%s\n", pass);
 
-printf("</p>");
 
-	if(find(user)== 1){
-		if(find(pass) == 1){
-		printf("<p>WELCOME TO THE PAGE</p>");
-		}
+	if(find(user, pass)== 1){
+
+	
+	printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py\"\>");
 	}
-
-	else if(find(user) == -1){
+	else if(find(user, pass) == -1){
 		printf("<p>MEMBER.CSV DOESNT EXIST</p>");
 	}
 	else{
-		printf("<p>NOT A MEMBER</P>");
+	printf("<head><title>redirect</title>");
+	printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
+	printf("</head>");
+
 	}
 
 printf("</html>");
