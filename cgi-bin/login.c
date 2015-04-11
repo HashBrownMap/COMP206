@@ -6,12 +6,15 @@
 int find(char *str, char *string){
 FILE *memberslog=NULL;
 char temp[300];
+char *pass=NULL;
+char *garbage=NULL;
 
 memberslog=fopen("members.csv", "rt");
 
-if(memberslog == NULL){
+if(string == NULL){
 	return -1;
 }
+
 while(fgets(temp,200,memberslog) != NULL)
 {
 	if((strstr(temp,str)) != NULL){
@@ -37,6 +40,11 @@ char *pass=NULL;
 char *split="&";
 char *splite="=";
 
+
+printf("Content-Type:text/html\n\n");
+printf("<html>");
+
+
 if(getenv("CONTENT_LENGTH") != NULL){
 if((string=malloc(sizeof(char) * n+1)) != NULL){
 	if(((fread(string, sizeof(char), n, stdin))) == n){
@@ -50,26 +58,42 @@ password = strtok(NULL, split);
 
 strtok_r(username, splite, &user);
 strtok_r(password, splite, &pass);
+	
+	
+	if(strlen(user) < 1 || strlen(pass) < 1){
+
+       	printf("<head><title>redirect</title>");
+        printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
+        printf("</head>");
+("<p>user is %s</p>",user);
+	return 0;
 
 
-printf("Content-Type:text/html\n\n");
-printf("<html>");
-
-
-	if(find(user, pass)== 1){
+	}
+//	else{
+	
+	
+//			printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py\"\>");
+		
+//	}
+	/*else if(find(user, pass) == -1){
+	printf("<head><title>redirect</title>");
+        printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
+        printf("</head>");
 
 	
-	printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py\"\>");
-	}
-	else if(find(user, pass) == -1){
-		printf("<p>MEMBER.CSV DOESNT EXIST</p>");
-	}
-	else{
+	}*/	
+	if(find(user, pass) != 1){
 	printf("<head><title>redirect</title>");
 	printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
 	printf("</head>");
 
 	}
+	else{
+
+                        printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py\"\>");
+
+  	}
 
 printf("</html>");
 return 0;
