@@ -1,6 +1,9 @@
 #!/usr/bin/python
 import sys
+import urlparse
 import cgi
+import urllib2
+import urllib
 import cgitb
 cgitb.enable()
  
@@ -19,12 +22,24 @@ print """
    </head>
    <body bgcolor="white">
    <center><img src="./Kanye.jpg"width="1250" alt="Image could not load, Kim sends her condolences"></center>
-   
-       <h1 style="background-color:white">
+"""   
+
+
+username = urllib.urlencode({'user': 0})
+f = urllib.urlopen("http://www.cs.mcgill.ca/~zchen66/cgi-bin/query?%s" % username)
+
+with open("members.csv") as list:
+	for line in list:
+		if username in line:
+			name = line[:max(line.find(' '), 0) or None]
+
+
+
+print"""       <h1 style="background-color:white">
            <FONT FACE="futura" color="black" size="26">
-           <br>
-               <center>[username]</center>
-           </FONT>
+           <br><center>"""
+print"%s" % f
+print"""          </center> </FONT>
            <br>
            <FONT FACE="futura" size="4" color="black">
            <a href="http://cs.mcgill.ca/FIX THIS"><div align="right">Logout</div></a>
