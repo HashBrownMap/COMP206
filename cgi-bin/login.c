@@ -39,7 +39,8 @@ char *user=NULL;
 char *pass=NULL;
 char *split="&";
 char *splite="=";
-
+char transfer[50];
+memset(transfer, '\0', sizeof(transfer));
 
 printf("Content-Type:text/html\n\n");
 printf("<html>");
@@ -56,6 +57,8 @@ if((string=malloc(sizeof(char) * n+1)) != NULL){
 username = strtok(string, split);
 password = strtok(NULL, split);
 
+strcpy(transfer, username);
+
 strtok_r(username, splite, &user);
 strtok_r(password, splite, &pass);
 	
@@ -65,33 +68,20 @@ strtok_r(password, splite, &pass);
        	printf("<head><title>redirect</title>");
         printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
         printf("</head>");
-("<p>user is %s</p>",user);
+
 	return 0;
 
 
 	}
-//	else{
-	
-	
-//			printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py\"\>");
-		
-//	}
-	/*else if(find(user, pass) == -1){
-	printf("<head><title>redirect</title>");
-        printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
-        printf("</head>");
-
-	
-	}*/	
-	if(find(user, pass) != 1){
-	printf("<head><title>redirect</title>");
-	printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
-	printf("</head>");
+	if(find(user, pass) != 1){	
+		printf("<head><title>redirect</title>");
+		printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/fail.html\"\>");
+		printf("</head>");
 
 	}
 	else{
 
-                        printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py\"\>");
+		printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py?%s\"\>", transfer);
 
   	}
 
