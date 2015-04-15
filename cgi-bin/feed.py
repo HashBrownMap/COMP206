@@ -4,13 +4,45 @@ import cgi
 import csv
 import cgitb
 import os
+import shutil
 cgitb.enable()
- 
- 
- 
+
+def usertousername(use):
+	f = open('members.csv', mode = 'rt')
+	for line in f:
+		if "%s"%use in line:
+			text = line.split(' ')
+			if use == text[0]:
+				user_name = text[1]
+				
+				return user_name
+
+def findfriends(user):
+    ref = open("members.csv", "r")
+    lst = []
+    friend_lst = []
+    for line in ref:
+        lst.append(line)
+    ref.close()
+    for x in range(0, len(lst)):
+        lst[x] = lst[x].strip()
+        lst[x] = lst[x].split(" ")
+        if (lst[x][1] == user):
+            for y in range(3, len(lst[x])):
+                friend_lst.append(lst[x][y])
+    return friend_lst
+
+def isfriends(me, him):
+    if him in findfriends(me):
+        return True
+    elif me==him:
+        return True
+    else:
+        return False
+
 print "Content-Type: text/html"
 print
- 
+
 print "<title>NEWS FEED</title>"
  
 print """
@@ -23,10 +55,14 @@ print """
    <center><img src="./Kanye.jpg"width="1250" alt="Image could not load, Kim sends her condolences"></center>
 """   
 
-name = cgi.FieldStorage()
-username = name.getvalue("user")
+form = cgi.FieldStorage()
+username = form.getvalue("user")
 
 list = open('members.csv', mode='rt')
+
+if not(form.has_key("user")):
+	print"<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66\"\>"
+
 for line in list:
 	if "%s"%username in line:
 		text = line.split(' ')
@@ -61,7 +97,7 @@ if not (form.has_key("status")):
 	exit
 else:
 	message = form.getvalue("status")
-	f.writelines('%s %s \n'%(name, message))
+	f.writelines('%s\n%s\n'%(name, message))
 	exit
 f.close()
 
@@ -69,16 +105,44 @@ f.close()
 print"""<h3 style="background-color:black">
             <FONT FACE="futura" size="5" color="white"><center>News Feed</center></FONT>
         </h3>"""
- 
- 
-with open('topics.csv') as news:
-        for line in news:
-		who = line[:max(line.find(' '), 0) or None]
-		print "<font face=\"futura\" size=\"4\"> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s: <br></b> </font> " %who
-		info = line.split(' ',1)[1]
-                print "<font face=\"futura\" size=\"4\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s<br><br>" % info
- 
- 
+
+newsfeed = open("topics.csv", "r")
+lst = []
+who = []
+status = []
+for line in newsfeed:
+	lst.append(line)
+newsfeed.close()
+for x in range(0, len(lst)):
+	if x % 2 == 0:
+		who.append(lst[x].strip())
+	else:
+		status.append(lst[x].strip())
+who.reverse()
+who.reverse()
+
+del lst[:]
+for x in range(0, len(who)):
+	a = who[x]
+	friend = usertousername(a)
+	b = status[x]
+	c = (a, b)
+	if isfriends(username, friend):
+		lst.insert(x, c)
+lst=lst[0:10]
+
+
+for i in range(0, len(lst)):
+	lst[i]="\n:\n".join(lst[i])
+
+string = "<br><br>".join(lst)
+
+print "<center><h3>%s</h3></center>"%string
+
+
+
+
+
 print """ 
 <h3 style="background-color:black"><FONT FACE="futura" size="5" color="white"><center>All Current Members</center></FONT></h3>
  
@@ -115,23 +179,23 @@ print """           <input type="submit" value="Add Friend">
        </form></center>"""
 form = cgi.FieldStorage()
 
-#addlist = open('members.csv', 'ra')
-
-
-#if not(form.has_key("friend")):
-#	print"<center><h4>You didn't enter a username.</h4></center>"
-#else:
-#	add = form.getvalue("friend")
-
-#with open('members.csv', 'w+b') as addlist:	
-#	lines = addlist.readlines()
-#	for i, line in enumerate(lines):
-#		if "%s"%username in line:
-#			line[i] = line[i].strip() + "%s"%add
-#	addlist.seek(0)
-#	for line in lines:
-#		addlist.write(line)
-#addlist.close()
+if not (form.has_key("friend")):
+        print "<center><H4>please input an username</H4></center>"
+        exit
+else:
+	friend = form.getvalue("friend")
+	temp = open('temp', 'wb')
+	with open('members.csv', 'r') as list:
+		for line in list:
+			if "%s"%username in line:
+				if "%s"%friend in line:
+					print "<center><H4>%s is already your friend</H4></center>"%friend
+					exit
+				else:
+					line = line.strip() + " %s\n"%friend
+			temp.write(line)
+	temp.close()
+	shutil.move('temp', 'members.csv')
 
 print"""<center><img src="http://cdn2.pitchfork.com/news/58263/547cb710.png"width="200" alt="North and West"></center>
 
