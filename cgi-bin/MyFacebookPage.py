@@ -46,6 +46,8 @@ def isfriends(me, him):
     else:
         return False
 
+##################################################################
+
 print "Content-Type: text/html"
 print
 
@@ -78,6 +80,7 @@ for line in list:
 			name = text[0] #gets the user's name
 
 
+########################################################################################
 
 print"""       <h1>
            <FONT FACE="futura" color="black" size="26">
@@ -115,13 +118,13 @@ else:
 	os.rename("files",'topics.csv')
 	exit
 
-
+###########################################################################################
 
 print"""<h3>
             <FONT FACE="futura" size="5" color="black"><center>News Feed</center></FONT><br>
 	<img src="./line.jpg" alt="line" width="1700"><br><br>
         </h3>"""
-#################################prints out friend's status#######################################
+#################################prints out friend's status#################################
 newsfeed = open("topics.csv", "r")
 lst = []
 who = []
@@ -153,11 +156,11 @@ for i in range(0, len(lst)):
 
 string = "<br><br>".join(lst)
 
+
 print "<center><h3>%s</h3></center>"%string
 
 
-
-
+######################################################################
 
 print """ 
 <br><br><h3><FONT FACE="futura" size="5" color="black"><center>All Current Members</center></FONT></h3><br>
@@ -180,6 +183,9 @@ with open("members.csv") as members:
 		namee = text[0]
 		usern = text[1]
 		print "<option>%s -username: %s</option><br>"%(namee,usern)
+
+###################################################################################
+
 print"""
 	</font></td>
         </tr>
@@ -215,6 +221,9 @@ else:
 			temp.write(line)
 	temp.close()
 	shutil.move('temp', 'members.csv')
+
+###################################################################################################
+
 
 print"""<center><img src="http://cdn2.pitchfork.com/news/58263/547cb710.png"width="200" alt="North and West"></center>
 
