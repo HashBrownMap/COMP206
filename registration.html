@@ -4,25 +4,25 @@
         <title>Become a Member</title>
     </head>
     <body>
-    <h1 style="background-color:black">
+    <h1>
         <br>
-        <FONT FACE="impact" size="14" color="white"><center>BECOME A MEMBER</center></FONT>
+        <FONT FACE="impact" size="14" color="black"><center>BECOME A MEMBER</center></FONT>
     <br>
     </h1>
     <center>
-    <form action="./public.html/registration.cgi" method="POST">
+    <form action="./cgi-bin/registration.pl" method="POST">
         <FONT FACE="futura" size="3" color="black">
-            Name: <input type="text" name="name">
-            Username: <input type="text" name="username">
-            Password: <input type="password" name="password">
+            Name: <input type="text" name="name" required>
+            Username: <input type="text" name="username" required>
+            Password: <input type="password" name="password" required>
         </FONT>
         <input type="submit" value="Register">
     </form>
     </center>
  
     <center><img src="./runaway.gif"width="1000"></center>
-    <h2 style="background-color:black">
-    <a style="background-color:black" href="http://cs.mcgill.ca/~zchen66"><FONT FACE="futura" size="5" color="white"><center>Return Home</center></FONT></a>
+    <h2>
+    <a href="http://cs.mcgill.ca/~zchen66"><FONT FACE="futura" size="5" color="black"><center>Return Home</center></FONT></a>
     </h2>
     </body>
 </html>

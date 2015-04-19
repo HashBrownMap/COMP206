@@ -81,7 +81,7 @@ strtok_r(password, splite, &pass);
 	}
 	else{
 
-		printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/feed.py?%s\"\>", transfer);
+		printf("<meta http-equiv=\"refresh\" content=\"0;url=http:\/\/www.cs.mcgill.ca/~zchen66/cgi-bin/MyFacebookPage.py?%s\"\>", transfer);
 
   	}
 
